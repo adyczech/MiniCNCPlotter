@@ -1,22 +1,23 @@
 %%  Converts raster image to gcode file.
 %   Each colour of image is separeted into its own layer and plotted separately
 
-
 clear all, clc
+%%  User's settings
 maxX = 35; %X axis limit
 maxY = 35; %Y axis limit
 
 stepsPmmX = 6.667; %step per mm for X stepper
 stepsPmmY = 6.75; %step per mm for Y stepper
 
-plotX = 35; %required image size X
-plotY = 35; %required image size Y
+plotX = 35;     %required plotted size X
+plotY = 35;     %required plotted size Y
 
-penSize = 0.1; %thickness of used pen
+penSize = 0.1;  %thickness of used pen
 
-imageName = '';
-gCodeName = 'oblouk.gcode';
+imageName = ''; %name of input raster image
+gCodeName = ''; %name of output gcode
 
+%% Image processing
 gCode = fopen(gCodeName, 'a+');
 
 img = imread(imageName);
@@ -79,9 +80,9 @@ for k = 1 : nol;
 end
 subplot(2,nol,nol+1);
 imshow(img);
-
 fprintf('Colors %d %d %d\n',colors');
 
+%% Gcode creator
 fprintf(gCode, 'G21\nG90\nG92 X0.00 Y0.00 Z0.00\n');
 penDown = 0;
 
