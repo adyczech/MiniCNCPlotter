@@ -1,3 +1,7 @@
+%%  Converts raster image to gcode file.
+%   Each colour of image is separeted into its own layer and plotted separately
+
+
 clear all, clc
 maxX = 35; %X axis limit
 maxY = 35; %Y axis limit
