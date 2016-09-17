@@ -88,7 +88,7 @@ penDown = 0;
 
 penPos = zeros(2,2);
 
-layers = flip(layers,1);        %flip if you plotter mirrored images
+layers = flip(layers,1);        %flip to change orientation of plotted image
 
 
 lflip = 0;
