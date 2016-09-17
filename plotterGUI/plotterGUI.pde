@@ -297,9 +297,9 @@ void draw() {
   fill(255);
   textFont(pfont35);
   textAlign(RIGHT);
-  text(xPos - xDiff, 670, 50);
-  text(yPos - yDiff, 670, 100);
-  text(zPos, 670, 150);
+  text(String.format("%.2f", xPos - xDiff), 670, 50);
+  text(String.format("%.2f", yPos - yDiff), 670, 100);
+  text(String.format("%.2f", zPos), 670, 150);
   textAlign(LEFT);
 
   //penSize
@@ -426,8 +426,13 @@ public void home() {
 
 public void pX() {
   if (myPort != null && !streaming) {
-    myPort.write("G91\nG00 X" + jog + " Y0.000 Z0.000\n");
-    print("G91\nG00 X" + jog + " Y0.000 Z0.000\n");
+    if (absolute == true) {
+      myPort.write("G91\nG00 X" + jog + " Y0.000 Z0.000\nG90\n");
+      print("G91\nG00 X" + jog + " Y0.000 Z0.000\nG90\n");
+    } else {
+      myPort.write("G91\nG00 X" + jog + " Y0.000 Z0.000\nG91\n");
+      print("G91\nG00 X" + jog + " Y0.000 Z0.000\nG91\n");
+    }
     xPos = xPos + jog;
   } else if (myPort == null && !streaming) {
     println("Select a COM port!");
@@ -436,8 +441,13 @@ public void pX() {
 
 public void nX() {
   if (myPort != null && !streaming) {
-    myPort.write("G91\nG00 X-" + jog + " Y0.000 Z0.000\n");
-    print("G91\nG00 X-" + jog + " Y0.000 Z0.000\n");
+    if (absolute == true) {
+      myPort.write("G91\nG00 X-" + jog + " Y0.000 Z0.000\nG90\n");
+      print("G91\nG00 X-" + jog + " Y0.000 Z0.000\nG90\n");
+    } else {
+      myPort.write("G91\nG00 X-" + jog + " Y0.000 Z0.000\nG91\n");
+      print("G91\nG00 X-" + jog + " Y0.000 Z0.000\nG91\n");
+    }
     xPos = xPos - jog;
   } else if (myPort == null && !streaming) {
     println("Select a COM port!");
@@ -446,8 +456,13 @@ public void nX() {
 
 public void pY() {
   if (myPort != null && !streaming) {
-    myPort.write("G91\nG00 X0.000 Y" + jog + " Z0.000\n");
-    print("G91\nG00 X0.000 Y" + jog + " Z0.000\n");
+    if (absolute == true) {
+      myPort.write("G91\nG00 X0.000 Y" + jog + " Z0.000\nG90\n");
+      print("G91\nG00 X0.000 Y" + jog + " Z0.000\nG90\n");
+    } else {
+      myPort.write("G91\nG00 X0.000 Y" + jog + " Z0.000\nG91\n");
+      print("G91\nG00 X0.000 Y" + jog + " Z0.000\nG91\n");
+    }
     yPos = yPos + jog;
   } else if (myPort == null && !streaming) {
     println("Select a COM port!");
@@ -456,8 +471,13 @@ public void pY() {
 
 public void nY() {
   if (myPort != null && !streaming) {
-    myPort.write("G91\nG00 X0.000 Y-" + jog + " Z0.000\n");
-    print("G91\nG00 X0.000 Y-" + jog + " Z0.000\n");
+    if (absolute == true) {
+      myPort.write("G91\nG00 X0.000 Y-" + jog + " Z0.000\nG90\n");
+      print("G91\nG00 X0.000 Y-" + jog + " Z0.000\nG90\n");
+    } else {
+      myPort.write("G91\nG00 X0.000 Y-" + jog + " Z0.000\nG91\n");
+      print("G91\nG00 X0.000 Y-" + jog + " Z0.000\nG91\n");
+    }
     yPos = yPos - jog;
   } else if (myPort == null && !streaming) {
     println("Select a COM port!");
