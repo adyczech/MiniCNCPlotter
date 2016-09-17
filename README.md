@@ -15,8 +15,8 @@ This repository is related to my project: https://youtu.be/pRecbFCnvJI
   - Features:
     * Visualizing a pen trajectory
     * Sending individual commands
-    * Maunual control of a pen position
+    * Manual control of a pen position
     * Streaming Gcode to a plotter
-    * Simulationg Gcode
+    * Simulation of Gcode
 * **rasterToGcode**
   - MATLAB script for generating Gcode from raster image            
