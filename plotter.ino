@@ -3,7 +3,7 @@
   Send GCODE to this Sketch using:  - Mini CNC Plotter GUI: plotter_gui.pde https
                                     - gctrl.pde https://github.com/damellis/gctrl
   Convert SVG to GCODE with MakerBot Unicorn plugin for Inkscape available here https://github.com/martymcguire/inkscape-unicorn
-  Convert   
+  Convert
 */
 
 #include <Servo.h>
@@ -90,11 +90,11 @@ void setup() {
   delay(200);
 
   pinMode(button, INPUT_PULLUP);
-  pinMode(led,OUTPUT);
+  pinMode(led, OUTPUT);
 
   // Decrease if necessary
-  myStepperX.setSpeed(190);
-  myStepperY.setSpeed(190);
+  myStepperX.setSpeed(300);
+  myStepperY.setSpeed(300);
 
   //  Set & move to initial default position
   // TBD
@@ -139,7 +139,7 @@ void loop()
           if (verbose) {
             Serial.print( "Received : ");
             Serial.println( line );
-          }         
+          }
           processIncomingLine( line, lineIndex );
           lineIndex = 0;
         }
@@ -212,40 +212,35 @@ void processIncomingLine( char* line, int charNB ) {
       case 'D':
         penDown();
         break;
-      case 'G':      
-        while(isDigit(line[ currentIndex])){
-          command += char(line[ currentIndex]);          
-          currentIndex++;        
-        }            
+      case 'G':
+        while (isDigit(line[ currentIndex])) {
+          command += char(line[ currentIndex]);
+          currentIndex++;
+        }
         switch ( command.toInt() ) {                  // Select G command
           case 0:                                   // G00 & G01 - Movement or fast movement. Same here
-          case 1:{
-            // /!\ Dirty - Suppose that X is before Y
-            char* indexX = strchr( line + currentIndex, 'X' ); // Get X/Y position in the string (if any)
-            char* indexY = strchr( line + currentIndex, 'Y' );
-            if ( indexY <= 0 ) {
-              newPos.x = atof( indexX + 1);
-              newPos.y = actuatorPos.y;
+          case 1: {
+              // /!\ Dirty - Suppose that X is before Y
+              char* indexX = strchr( line + currentIndex, 'X' ); // Get X/Y position in the string (if any)
+              char* indexY = strchr( line + currentIndex, 'Y' );
+              if (indexX > 0) {
+                newPos.x = atof( indexX + 1);
+                if (absolute == true) {
+                  actuatorPos.x = newPos.x;
+                } else {
+                  actuatorPos.x = newPos.x  + actuatorPos.x;
+                }
+              }
+              if (indexY > 0) {
+                newPos.y = atof( indexY + 1);
+                if (absolute == true) {
+                  actuatorPos.y = newPos.y;
+                } else {
+                  actuatorPos.y = newPos.y  + actuatorPos.y;
+                }
+              }
+              drawLine(actuatorPos.x, actuatorPos.y );              
             }
-            else if ( indexX <= 0 ) {
-              newPos.y = atof( indexY + 1);
-              newPos.x = actuatorPos.x;
-            }
-            else {
-              newPos.y = atof( indexY + 1);
-              indexY = '\0';
-              newPos.x = atof( indexX + 1);
-            }
-            if (absolute == true) {
-              actuatorPos.x = newPos.x;
-              actuatorPos.y = newPos.y;
-            } else {
-              actuatorPos.x = newPos.x  + actuatorPos.x;
-              actuatorPos.y = newPos.y  + actuatorPos.y;
-            }
-            drawLine(actuatorPos.x, actuatorPos.y );
-            //        Serial.println("ok");
-          }
             break;
           case 90:
             absolute = true;
@@ -256,21 +251,20 @@ void processIncomingLine( char* line, int charNB ) {
         }
         break;
       case 'M':
-       while(isDigit(line[ currentIndex])){
-          command += char(line[ currentIndex]);          
-          currentIndex++;        
+        while (isDigit(line[ currentIndex])) {
+          command += char(line[ currentIndex]);
+          currentIndex++;
         }
         switch ( command.toInt()) {
           case 1:
-            digitalWrite(led,HIGH);            
-            while(digitalRead(button) == HIGH){                
-              }
-            digitalWrite(led,LOW);           
+            digitalWrite(led, HIGH);
+            while (digitalRead(button) == HIGH) {
+            }
+            digitalWrite(led, LOW);
           case 300:
             {
               char* indexS = strchr( line + currentIndex, 'S' );
               float Spos = atof( indexS + 1);
-              //          Serial.println("ok");
               if (Spos == 30) {
                 penDown();
               }
@@ -284,7 +278,7 @@ void processIncomingLine( char* line, int charNB ) {
             Serial.print( actuatorPos.x );
             Serial.print( "  -  Y = " );
             Serial.println( actuatorPos.y );
-            break;                   
+            break;
         }
     }
   }
@@ -301,16 +295,7 @@ void processIncomingLine( char* line, int charNB ) {
    int (x2;y2) : Ending coordinates
  **********************************/
 void drawLine(float x1, float y1) {
-
-  if (verbose)
-  {
-    Serial.print("fx1, fy1: ");
-    Serial.print(x1);
-    Serial.print(",");
-    Serial.print(y1);
-    Serial.println("");
-  }
-
+  
   //  Bring instructions within limits
   if (x1 >= Xmax) {
     x1 = Xmax;
@@ -325,27 +310,9 @@ void drawLine(float x1, float y1) {
     y1 = Ymin;
   }
 
-  if (verbose)
-  {
-    Serial.print("Xpos, Ypos: ");
-    Serial.print(Xpos);
-    Serial.print(",");
-    Serial.print(Ypos);
-    Serial.println("");
-  }
-
-  if (verbose)
-  {
-    Serial.print("x1, y1: ");
-    Serial.print(x1);
-    Serial.print(",");
-    Serial.print(y1);
-    Serial.println("");
-  }
-
   //  Convert coordinates to steps
   x1 = (int)(x1 * StepsPerMillimeterX);
-  y1 = (int)(y1 * StepsPerMillimeterY);  
+  y1 = (int)(y1 * StepsPerMillimeterY);
   float x0 = Xpos;
   float y0 = Ypos;
 
@@ -380,25 +347,7 @@ void drawLine(float x1, float y1) {
       delay(StepDelay);
     }
   }
-
-  if (verbose)
-  {
-    Serial.print("dx, dy:");
-    Serial.print(dx);
-    Serial.print(",");
-    Serial.print(dy);
-    Serial.println("");
-  }
-
-  if (verbose)
-  {
-    Serial.print("Going to (");
-    Serial.print(x0);
-    Serial.print(",");
-    Serial.print(y0);
-    Serial.println(")");
-  }
-
+  
   //  Delay before any next lines are submitted
   delay(LineDelay);
   //  Update the positions
@@ -411,15 +360,10 @@ void penUp() {
   penServo.write(penZUp);
   delay(LineDelay);
   Zpos = Zmax;
-  if (verbose) {
-    Serial.println("Pen up!");
-  }
 }
 //  Lowers pen
 void penDown() {
   penServo.write(penZDown);
   delay(LineDelay);
   Zpos = Zmin;
-  if (verbose) {
-    Serial.println("Pen down.");
-  }}
+}
