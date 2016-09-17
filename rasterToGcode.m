@@ -3,8 +3,8 @@
 
 clear all, clc
 %%  User's settings
-maxX = 35; %X axis limit
-maxY = 35; %Y axis limit
+maxX = 38; %X axis limit
+maxY = 38; %Y axis limit
 
 stepsPmmX = 6.667; %step per mm for X stepper
 stepsPmmY = 6.75; %step per mm for Y stepper
@@ -80,7 +80,7 @@ for k = 1 : nol;
 end
 subplot(2,nol,nol+1);
 imshow(img);
-fprintf('Colors %d %d %d\n',colors');
+fprintf('Color %d %d %d\n',colors');
 
 %% Gcode creator
 fprintf(gCode, 'G21\nG90\nG92 X0.00 Y0.00 Z0.00\n');
@@ -88,7 +88,7 @@ penDown = 0;
 
 penPos = zeros(2,2);
 
-layers = flip(layers,2);        %flip if you plotter mirrored images
+layers = flip(layers,1);        %flip if you plotter mirrored images
 
 
 lflip = 0;
