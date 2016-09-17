@@ -1,7 +1,7 @@
 # MiniCNCPlotter
 This repository is related to my project: https://youtu.be/pRecbFCnvJI
 
-* plotter.ino
+* **plotter.ino**
   - Arduino code running on  plotter
   - Supported commands:
     * G0, G1 - Linear motion
@@ -10,12 +10,13 @@ This repository is related to my project: https://youtu.be/pRecbFCnvJI
     * M114 - Reports position
     * M300 S30 - Pen down
     * M300 S50 - Pen up
-* plotterGUI
-  - control program running on PC
+* **plotterGUI**
+  - Processing control program running on PC
   - Features:
     * Visualizing a pen trajectory
     * Sending individual commands
     * Maunual control of a pen position
     * Streaming Gcode to a plotter
     * Simulationg Gcode
-* rasterToGcode - MATLAB script for generating Gcode from raster image            
+* **rasterToGcode**
+  - MATLAB script for generating Gcode from raster image            
